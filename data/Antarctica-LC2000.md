@@ -20,8 +20,17 @@ Correspondence between land cover types and Ecosystem Functional Groups:
 
 
 ```sh
-mkdir -p $GISDATA/
-cd $GISDATA/
+mkdir -p $GISDATA/landcover/Antarctica-LC2000
+cd $GISDATA/landcover/Antarctica-LC2000
+wget --continue -O AntarcticaLC2000_release_online.rar https://zenodo.org/record/826032/files/AntarcticaLC2000%20release%20online.rar?download=1
+
+## uncompress in working directory
+cd $WORKDIR
+unrar e $GISDATA/landcover/Antarctica-LC2000/AntarcticaLC2000_release_online.rar
+
+## check projection information
+ogrinfo -al -so ice_freerocks.shp
+ dbfdump ice_freerocks.dbf 
 
 ```
 
