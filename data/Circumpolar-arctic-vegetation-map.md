@@ -17,6 +17,8 @@
 mkdir -p $GISDATA/vegetation/CAVM/
 cd $GISDATA/vegetation/CAVM/
 mv ~/Downloads/*CAVM.zip $GISDATA/vegetation/CAVM/
+unzip Raster\ CAVM.zip
+
 ```
 
 Legend (matching total area with suppl info from the original publication)

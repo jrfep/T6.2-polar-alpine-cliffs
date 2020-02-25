@@ -16,6 +16,9 @@ r.colors CLC1km_Barren color=viridis
 ## import Antarctic Landcover 2000
 r.proj input=ALC2000_1k dbase=${GISDB}/raw location=AntarcticLC2000 mapset=PERMANENT output=ALC2000
 
+## import Circumpolar Arctic vegetation
+r.proj input=CAVM_v1 dbase=${GISDB}/raw location=CAVM mapset=PERMANENT output=CAVM_v1
+
 r.in.gdal -a -r input=${WORKDIR}/GMBA_climatic_belts_V1.1.tif output=GMBA_climatic_belts
 
 r.stats -can GMBA_climatic_belts,CLC1km_Barren output=ThermalBelts_Barren.tab
