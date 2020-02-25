@@ -1,11 +1,18 @@
 conda deactivate
 cd $WORKDIR
-grass --text -c $GISDATA/soil/circumpolar_permafrost/treeline.shp ${GISDB}/raw/CAVM
+grass --text -c $GISDATA/soil/circumpolar_permafrost/nhipa.tif ${GISDB}/raw/CA_permafrost
 
-r.in.gdal input=$GISDATA/vegetation/CAVM/raster_cavm_v1.tif output=CAVM_v1
-r.colors map=CAVM_v1 color=random
-r.null map=CAVM_v1 setnull=99,92
+r.in.gdal input=$GISDATA/soil/circumpolar_permafrost/nhipa.tif output=Permafrost
+r.colors map=Permafrost color=random
+r.null map=Permafrost setnull=0
+
+v.in.ogr -o input=$GISDATA/soil/circumpolar_permafrost/permaice.shp output=permaice
+ v.in.ogr -o input=$GISDATA/soil/circumpolar_permafrost/treeline.shp output=treeline
+v.in.ogr -o input=$GISDATA/soil/circumpolar_permafrost/subsea.shp output=subsea
 
 d.mon start=wx0
-d.rast CAVM_v1
+d.rast Permafrost
+d.vect treeline
+d.vect permaice
+d.vect subsea
 d.mon stop=wx0
