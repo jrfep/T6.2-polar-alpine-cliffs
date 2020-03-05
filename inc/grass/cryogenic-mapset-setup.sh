@@ -26,19 +26,30 @@ r.in.gdal -a -r --overwrite input=${WORKDIR}/GMBA_climatic_belts_V1.1.tif output
 ## Koeppen Geiger classification, Beck et al. version 1
 r.in.gdal -o -a -r --overwrite input=Beck_KG_V1_present_0p0083.tif output=KoeppnGeiger_classes
 
+## topography: mountain definition
+r.in.gdal -a -r --overwrite input=${WORKDIR}/GMBA_mountain_definition_V1.1.tif output=GMBA_mountains
+
 ## landcover
 ## Near global consensus landcover
 r.in.gdal -a -r --overwrite input=${GISDATA}/landcover/CLC1km/with_DISCover/consensus_full_class_1.tif output=CLC1km_Needleleaf
+r.in.gdal -a -r --overwrite input=${GISDATA}/landcover/CLC1km/with_DISCover/consensus_full_class_2.tif output=CLC1km_Evergreen
+r.in.gdal -a -r --overwrite input=${GISDATA}/landcover/CLC1km/with_DISCover/consensus_full_class_3.tif output=CLC1km_Deciduous
+r.in.gdal -a -r --overwrite input=${GISDATA}/landcover/CLC1km/with_DISCover/consensus_full_class_4.tif output=CLC1km_MixedTrees
+
 r.in.gdal -a -r --overwrite input=${GISDATA}/landcover/CLC1km/with_DISCover/consensus_full_class_6.tif output=CLC1km_Herbaceous
 r.in.gdal -a -r --overwrite input=${GISDATA}/landcover/CLC1km/with_DISCover/consensus_full_class_5.tif output=CLC1km_Shrubs
 r.in.gdal -a -r --overwrite input=${GISDATA}/landcover/CLC1km/with_DISCover/consensus_full_class_10.tif output=CLC1km_Snow
 r.in.gdal -a -r --overwrite input=${GISDATA}/landcover/CLC1km/with_DISCover/consensus_full_class_11.tif output=CLC1km_Barren
 
-for VAR in Snow Barren Shrubs Herbaceous Needleleaf
+for VAR in Snow Barren Shrubs Herbaceous Needleleaf Evergreen Deciduous MixedTrees
 do
    r.null CLC1km_${VAR}  setnull=0
    r.colors CLC1km_${VAR} color=viridis
 done
+
+## USGS EROS Land Cover
+r.in.gdal -o -a -r --overwrite input=${GISDATA}/landcover/USGS_EROS/data.nc output=GLCCDB_v2
+r.colors map=GLCCDB_v2 color=random
 
 ## Antarctic landcover 2010
 r.proj input=ALC2000_1k dbase=${GISDB}/raw location=AntarcticLC2000 mapset=PERMANENT output=ALC2000
