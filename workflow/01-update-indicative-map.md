@@ -16,11 +16,10 @@ r.mapcalc --overwrite "CLC1km_Snow_rocks=if((if(CLC1km_Snow>0,1,0)+if(CLC1km_Bar
 r.mapcalc --overwrite "CAVM_rocks=if(CAVM_v1<6,1,null())"
 r.mapcalc --overwrite "GLCCDB_rocks=if(GLCCDB_v2==23,1,null())"
 
-
-
 ```
 
 Then we can assemble a map using:
+
 ```sh
 r.mapcalc --overwrite "T6_2_known=max(if(isnull(GLIMS_rocks),0,1),if(isnull(GN_rocks),0,1),if(isnull(ALC2000_rocks),0,1))"
 ##r.null map=T6_2_known setnull=0
@@ -57,5 +56,40 @@ INSERT INTO map_metadata values('T6.2.IM.v2','T6.2','v1.0','v2.0','Known locatio
 INSERT INTO map_references values('T6.2.IM.v2','v2.0','Tuanmu et al. 2014'),('T6.2.IM.v2','v2.0','Raup et al 2007'),('T6.2.IM.v2','v2.0','GLIMS and NSIDC 2005-2018'),('T6.2.IM.v2','v2.0','Hui et al. 2017'),('T6.2.IM.v2','v2.0','Raynolds et al. 2019'),('T6.2.IM.v2','v2.0','GeoNames 2020'),('T6.2.IM.v2','v2.0','Loveland et al. 2000') ON CONFLICT DO NOTHING;
  \x
  select * from map_metadata where code='T6.2';
+
+```
+
+Export the resulting file as a [Cloud optimized Geotiff](https://www.cogeo.org/). Following recommended steps for [Creation of a cloud optimized GeoTIFF](https://trac.osgeo.org/gdal/wiki/CloudOptimizedGeoTIFF#HowtogenerateitwithGDAL):
+
+```sh
+export TARGETDIR=cogs
+
+export SRCMAP=T6.2.IM.v2
+
+g.region n=90 s=-90 e=180 w=-180 res=0.008333333333333
+
+for SRCMAP in T6.2.IM.v2 T2.5.IM.v2
+do
+   r.out.gdal --overwrite input=$SRCMAP output=tmp.tif
+   source $SCRIPTDIR/inc/grass/export-cloud-optimized-geotiff.sh
+done
+```
+
+Create a PNG file for the online profile:
+
+```sh
+export SCRIPTDIR=/home/jferrer/proyectos/UNSW/T6.2-polar-alpine-cliffs
+export TARGETDIR=/home/jferrer/proyectos/UNSW/Ecosystem-profiles-comments/assets/maps/
+export SRCDIR=eck4
+
+export TARGETARCH=T6.2.png
+export SRCMAP=T6.2.IM.v2
+
+export TARGETARCH=T2.5.png
+export SRCMAP=T2.5.IM.v2
+
+source $SCRIPTDIR/inc/grass/prepare-profile-map.sh
+## Rscript --vanilla file.R SRCDIR SRCMAP TARGETDIR TARGETARCH
+Rscript --vanilla $SCRIPTDIR/inc/R/output-profile-map.R $SRCDIR $SRCMAP $TARGETDIR $TARGETARCH
 
 ```

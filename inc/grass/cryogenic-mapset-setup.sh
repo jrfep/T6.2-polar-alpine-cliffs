@@ -5,6 +5,9 @@ g.mapset -c cryogenic
 gdalinfo ${GISDATA}/landcover/CLC1km/with_DISCover/consensus_full_class_1.tif
 g.region n=90 s=-90 e=180 w=-180 res=0.008333333333333
 
+## Country data for filtering:
+v.to.rast input=TMWB_countries@PERMANENT output=countries use=cat
+
 ## data sources for cryogenic functional groups:
 
 ## climatologies
@@ -17,6 +20,7 @@ r.in.gdal -a -r --overwrite input=${GISDATA}/clima/CHELSA/bioclim/CHELSA_bio10_1
 ## radiation
 ##UV-B
 r.in.gdal -o -a -r --overwrite input=${GISDATA}/sensores/glUV/56459_UVB1_Annual_Mean_UV-B.asc output=UVB1_Annual_Mean
+r.in.gdal -o -a -r --overwrite input=${GISDATA}/sensores/glUV/56460_UVB2_UV-B_Seasonality.asc output=UVB2_Seasonality
 
 ## climatic stratification:
 ## Global Environmetal Stratification, version 3
