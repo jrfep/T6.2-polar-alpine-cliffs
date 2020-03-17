@@ -3,7 +3,6 @@ require(raster)
 args <- commandArgs(TRUE)
 
 r1 <- raster(sprintf("%s/%s.tif",args[1],args[2]))
-par(mar=c(0,0,0,0))
 h <- 350
 w <- round(h* ncol(r1)/nrow(r1))
 

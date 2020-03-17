@@ -12,7 +12,7 @@ r.mapcalc --overwrite expression="profile_map=if(isnull($SRCMAP),if(isnull(world
 r.out.gdal --overwrite input=profile_map output=tmp.tif
 
 rm $SRCDIR/$SRCMAP.tif
-gdalwarp -t_srs '+proj=eck4 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs' -crop_to_cutline -cutline marco.json tmp.tif $SRCDIR/$SRCMAP.tif
+gdalwarp -t_srs '+proj=eck4 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs' -co COMPRESS=DEFLATE -crop_to_cutline -cutline marco.json tmp.tif $SRCDIR/$SRCMAP.tif
 
 rm tmp.tif
 
